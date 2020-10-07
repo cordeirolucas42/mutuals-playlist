@@ -4,7 +4,8 @@
   "description": "Create and update spotify playlist based on track links tweeted by your mutuals",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "path": "^0.12.7",
     "spotify-web-api-node": "^4.0.0",
     "twitter-lite": "^0.14.0"
   }
