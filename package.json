@@ -1,0 +1,25 @@
+{
+  "name": "mutuals-playlist",
+  "version": "1.0.0",
+  "description": "Create and update spotify playlist based on track links tweeted by your mutuals",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cordeirolucas42/mutuals-playlist.git"
+  },
+  "author": "Lucas Cordeiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cordeirolucas42/mutuals-playlist/issues"
+  },
+  "homepage": "https://github.com/cordeirolucas42/mutuals-playlist#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "spotify-web-api-node": "^4.0.0",
+    "twitter-lite": "^0.14.0"
+  }
+}
