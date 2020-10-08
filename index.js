@@ -101,7 +101,7 @@ app.get('/redirect', async (req, res) => {
     console.log(users[currentUser].spotifyApi)
     const data = await users[currentUser].spotifyApi.authorizationCodeGrant(req.query.code)
     console.log("code grant: " + data)
-    // await users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
+    await users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
     res.render('redirect')
 })
 
