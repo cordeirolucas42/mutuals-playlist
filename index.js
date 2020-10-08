@@ -99,6 +99,7 @@ app.get('/redirect', async (req, res) => {
     console.log("redirect!!!")
     console.log(req.query.code)
     console.log(req.query.state)
+    if (req.query.code === "") res.redirect("/")
     req.session.currentUser = users.length
     console.log(req.session.currentUser)
     const currentUser = req.session.currentUser
