@@ -69,7 +69,9 @@ class User {
         this.spotifyApi.setAccessToken(accessToken)
         this.spotifyApi.setRefreshToken(refreshToken)
         console.log("authorized spotify")
-        this.spotifyApi.createPlaylist('Mutuals Playlist', { 'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
+        const data = await this.spotifyApi.getMe()
+        this.spotifyID = data.body.id
+        this.spotifyApi.createPlaylist(this.spotifyID, {'name': 'Mutuals Playlist', 'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
         .then(function(data) {
             console.log('Created playlist!')
             console.log("playlist id: " + data.body.id)
