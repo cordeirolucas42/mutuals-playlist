@@ -20,7 +20,7 @@ var T = new Twitter({
     access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 });
 
-async function getFollows(){
+async function getFollows(twitterHandle){
     let followCursor = -1
     let friendCursor = -1
     let followers = []
@@ -28,12 +28,12 @@ async function getFollows(){
 
     while (followCursor !== 0 || friendCursor !== 0){
         if (followCursor !== 0){
-            const result = await T.get('followers/list', { screen_name: 'pulltheripcord', count: 200, cursor: followCursor})
+            const result = await T.get('followers/list', { screen_name: twitterHandle, count: 200, cursor: followCursor})
             followers = followers.concat(result.users.map(user => user.id_str))
             followCursor = result.next_cursor
         }
         if (friendCursor !== 0){
-            const result = await T.get('friends/list', { screen_name: 'pulltheripcord', count: 200, cursor: friendCursor})
+            const result = await T.get('friends/list', { screen_name: twitterHandle, count: 200, cursor: friendCursor})
             following = following.concat(result.users.map(user => user.id_str))
             friendCursor = result.next_cursor
         }
@@ -75,9 +75,8 @@ class User {
         this.twitterHandle = twitterHandle
         this.twitterID = twitterID
         //find mutuals
-        [this.followers,this.following] = await getFollows()
-        this.mutuals = this.following.filter(id => this.followers.includes(id))
-        console.log(JSON.stringify(this.mutuals))
+        [this.followers,this.following] = await getFollows(this.twitterHandle)
+        this.mutuals = this.following.filter(id => this.followers.includes(id))        
     }
     async AddTrack(trackID){
         const res = await this.spotifyApi.getTracks(trackID)
@@ -97,6 +96,7 @@ app.get('/redirect', async (req, res) => {
     console.log(req.query.code)
     console.log(req.query.state)
     req.session.currentUser = users.length
+    console.log(req.session.currentUser)
     const currentUser = req.session.currentUser
     users.push(new User(req.query.code))    
     console.log(users[currentUser].spotifyApi)
@@ -110,8 +110,11 @@ app.post("/twitter",async (req,res) => {
     const currentUser = req.session.currentUser
     let twitterHandle = req.body.twitterHandle
     let user = await T.get("users/show", {screen_name: twitterHandle})
-    users[currentUser].TwitterAuth(twitterHandle,user.id_str)
+    console.log("user found: ")
+    console.log(JSON.stringify(user))
+    await users[currentUser].TwitterAuth(twitterHandle,user.id_str)
     users[currentUser].mutuals.push(users[currentUser].twitterID)
+    console.log(JSON.stringify(users[currentUser].mutuals))
 })
 
 app.listen(process.env.PORT || 5000, () => {
