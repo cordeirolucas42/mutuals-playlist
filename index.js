@@ -90,7 +90,7 @@ app.get('/', (req, res) => {
     res.render('index', { title: 'Tweet To Spotify' });
 })
 
-app.get('/redirect', (req, res) => {
+app.get('/redirect', async (req, res) => {
     console.log("redirect!!!")
     console.log(req.query.code)
     console.log(req.query.state)
@@ -102,7 +102,7 @@ app.get('/redirect', (req, res) => {
     res.render('redirect')
 })
 
-app.post("/twitter",(req,res) => {
+app.post("/twitter",async (req,res) => {
     const currentUser = req.session.currentUser
     let twitterHandle = req.body.twitterHandle
     let twitterID = await T.get("users/show", {screen_name: twitterHandle})
