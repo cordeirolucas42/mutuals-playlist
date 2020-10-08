@@ -74,7 +74,7 @@ class User {
         let playlistData = await this.spotifyApi.createPlaylist(this.spotifyID,'Mutuals Playlist', {'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
         console.log('Created playlist!')
         console.log("playlist id: " + playlistData.body.id)
-        this.playlistID = data.body.id
+        this.playlistID = playlistData.body.id
     }
     async TwitterAuth(twitterHandle,twitterID){
         this.twitterHandle = twitterHandle
