@@ -69,19 +69,12 @@ class User {
         this.spotifyApi.setAccessToken(accessToken)
         this.spotifyApi.setRefreshToken(refreshToken)
         console.log("authorized spotify")
-        const data = await this.spotifyApi.getMe()
-        this.spotifyID = data.body.id
-        this.spotifyApi.createPlaylist(this.spotifyID,'Mutuals Playlist', {'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
-        .then(function(data) {
-            console.log('Created playlist!')
-            console.log("playlist id: " + data.body.id)
-            this.playlistID = data.body.id
-            console.log("THIS playlist id: " + this.playlistID)
-        }, function(err) {
-            console.log('Something went wrong!', err);
-        })
-        // const res = await this.spotifyApi.createPlaylist('Mutuals Playlist', { 'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
-        // this.playlistID = res.body.id
+        let userData = await this.spotifyApi.getMe()
+        this.spotifyID = userData.body.id
+        let playlistData = await this.spotifyApi.createPlaylist(this.spotifyID,'Mutuals Playlist', {'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
+        console.log('Created playlist!')
+        console.log("playlist id: " + playlistData.body.id)
+        this.playlistID = data.body.id
     }
     async TwitterAuth(twitterHandle,twitterID){
         this.twitterHandle = twitterHandle
