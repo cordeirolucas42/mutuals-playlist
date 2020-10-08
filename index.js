@@ -111,6 +111,7 @@ app.get('/redirect', async (req, res) => {
     console.log(users[currentUser].spotifyApi)
     const data = await users[currentUser].spotifyApi.authorizationCodeGrant(req.query.code)
     console.log("access token: " + data.body['access_token'])
+    console.log("refresh token: " + data.body['refresh_token'])
     await users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
     res.render('redirect')
 })
@@ -125,7 +126,7 @@ app.post("/twitter",async (req,res) => {
     users[currentUser].mutuals.push(users[currentUser].twitterID)
     console.log("mutuals: ")
     console.log(JSON.stringify(users[currentUser].mutuals))
-    res.render("mutuals",{mutuals: mutuals})
+    res.render("mutuals",{mutuals: users[currentUser].mutuals})
 })
 
 app.listen(process.env.PORT || 5000, () => {
