@@ -105,8 +105,9 @@ app.get('/redirect', async (req, res) => {
 app.post("/twitter",async (req,res) => {
     const currentUser = req.session.currentUser
     let twitterHandle = req.body.twitterHandle
-    let twitterID = await T.get("users/show", {screen_name: twitterHandle})
-    users[currentUser].TwitterAuth(twitterHandle,twitterID)
+    let user = await T.get("users/show", {screen_name: twitterHandle})
+    users[currentUser].TwitterAuth(twitterHandle,user.id_str)
+    users[currentUser].mutuals.push(users[currentUser].twitterID)
 })
 
 app.listen(process.env.PORT || 5000, () => {
