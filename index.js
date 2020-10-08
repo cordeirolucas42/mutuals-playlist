@@ -38,7 +38,8 @@ async function getFollows(twitterHandle){
             friendCursor = result.next_cursor
         }
     }
-    return [followers,following]
+    let mutuals = following.filter(id => followers.includes(id)) 
+    return mutuals
 }
 
 class Track {
@@ -75,8 +76,7 @@ class User {
         this.twitterHandle = twitterHandle
         this.twitterID = twitterID
         //find mutuals
-        [this.followers,this.following] = await getFollows(this.twitterHandle)
-        this.mutuals = this.following.filter(id => this.followers.includes(id))        
+        this.mutuals = await getFollows(this.twitterHandle)
     }
     async AddTrack(trackID){
         const res = await this.spotifyApi.getTracks(trackID)
@@ -111,9 +111,10 @@ app.post("/twitter",async (req,res) => {
     let twitterHandle = req.body.twitterHandle
     let user = await T.get("users/show", {screen_name: twitterHandle})
     console.log("user found: ")
-    console.log(JSON.stringify(user))
+    console.log(user.id_str)
     await users[currentUser].TwitterAuth(twitterHandle,user.id_str)
     users[currentUser].mutuals.push(users[currentUser].twitterID)
+    console.log("mutuals: ")
     console.log(JSON.stringify(users[currentUser].mutuals))
 })
 
