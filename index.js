@@ -97,7 +97,7 @@ app.get('/redirect', async (req, res) => {
     req.session.currentUser = users.length
     const currentUser = req.session.currentUser
     users.push(new User(req.query.code))
-    const data = await this.spotifyApi.authorizationCodeGrant(users[currentUser].spotifyCode)
+    const data = await users[currentUser].spotifyApi.authorizationCodeGrant(users[currentUser].spotifyCode)
     await users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
     res.render('redirect')
 })
