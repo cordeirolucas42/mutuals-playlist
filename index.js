@@ -60,6 +60,7 @@ class User {
             clientSecret: process.env.CLIENT_SECRET,
             redirectUri: 'https://mutuals-playlist.herokuapp.com/redirect'
         })
+        console.log("new user created")
     }
     async SpotifyAuth(accessToken,refreshToken){
         this.refreshToken = refreshToken
@@ -96,9 +97,11 @@ app.get('/redirect', async (req, res) => {
     console.log(req.query.state)
     req.session.currentUser = users.length
     const currentUser = req.session.currentUser
-    users.push(new User(req.query.code))
-    const data = await users[currentUser].spotifyApi.authorizationCodeGrant(users[currentUser].spotifyCode)
-    await users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
+    users.push(new User(req.query.code))    
+    console.log(users[currentUser].spotifyApi)
+    const data = await users[currentUser].spotifyApi.authorizationCodeGrant(req.query.code)
+    console.log("code grant: " + data)
+    // await users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
     res.render('redirect')
 })
 
