@@ -2,13 +2,13 @@
 <html>
   <head>
     <title>Tweet To Spotify</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/style.css' />
   </head>
   <body>
     <p>Autorizado pelo Spotify</p>
-    <form action="POST">
-        <label for="twitter-handle">Twitter Handle</label>
-        <input type="text" name="twitter-handle">
+    <form action="/twitter" method="post">
+        <label for="twitterHandle">Twitter Handle</label>
+        <input type="text" name="twitterHandle">
         <button type="submit">Submit</button>
     </form>
   </body>
