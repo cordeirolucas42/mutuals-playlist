@@ -63,12 +63,21 @@ class User {
         })
         console.log("new user created")
     }
-    SpotifyAuth(accessToken,refreshToken){
+    async SpotifyAuth(accessToken,refreshToken){
         this.refreshToken = refreshToken
         this.accessToken = accessToken
         this.spotifyApi.setAccessToken(accessToken)
         this.spotifyApi.setRefreshToken(refreshToken)
         console.log("authorized spotify")
+        this.spotifyApi.createPlaylist('Mutuals Playlist', { 'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
+        .then(function(data) {
+            console.log('Created playlist!')
+            console.log("playlist id: " + data.body.id)
+            this.playlistID = data.body.id
+            console.log("THIS playlist id: " + this.playlistID)
+        }, function(err) {
+            console.log('Something went wrong!', err);
+        })
         // const res = await this.spotifyApi.createPlaylist('Mutuals Playlist', { 'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
         // this.playlistID = res.body.id
     }
@@ -102,7 +111,7 @@ app.get('/redirect', async (req, res) => {
     console.log(users[currentUser].spotifyApi)
     const data = await users[currentUser].spotifyApi.authorizationCodeGrant(req.query.code)
     console.log("access token: " + data.body['access_token'])
-    users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
+    await users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
     res.render('redirect')
 })
 
@@ -116,6 +125,7 @@ app.post("/twitter",async (req,res) => {
     users[currentUser].mutuals.push(users[currentUser].twitterID)
     console.log("mutuals: ")
     console.log(JSON.stringify(users[currentUser].mutuals))
+    res.render("mutuals",{mutuals: mutuals})
 })
 
 app.listen(process.env.PORT || 5000, () => {
