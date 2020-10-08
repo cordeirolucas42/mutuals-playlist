@@ -66,7 +66,7 @@ class User {
         this.accessToken = accessToken
         this.spotifyApi.setAccessToken(accessToken)
         this.spotifyApi.setRefreshToken(refreshToken)
-        const res = await spotifyApi.createPlaylist('Mutuals Playlist', { 'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
+        const res = await this.spotifyApi.createPlaylist('Mutuals Playlist', { 'description': 'Playlist with tweeted songs from my mutuals on twitter', 'public': true })
         this.playlistID = res.body.id
     }
     async TwitterAuth(twitterHandle,twitterID){
@@ -78,7 +78,7 @@ class User {
         console.log(JSON.stringify(this.mutuals))
     }
     async AddTrack(trackID){
-        const res = await spotifyApi.getTracks(trackID)
+        const res = await this.spotifyApi.getTracks(trackID)
         const track = res.body.tracks[0]
         this.playlist.push(new Track(trackID,track.name,track.artists[0].name,track.album.name))
         console.log(this.playlist)
@@ -97,7 +97,7 @@ app.get('/redirect', async (req, res) => {
     req.session.currentUser = users.length
     const currentUser = req.session.currentUser
     users.push(new User(req.query.code))
-    const data = await spotifyApi.authorizationCodeGrant(users[currentUser].spotifyCode)
+    const data = await this.spotifyApi.authorizationCodeGrant(users[currentUser].spotifyCode)
     await users[currentUser].SpotifyAuth(data.body['access_token'],data.body['refresh_token'])
     res.render('redirect')
 })
